@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import Routes from "./common/RouteList";
 import { MoralisProvider } from "react-moralis";
 import { moralisServerUrl, moralisAppId } from "./credentials"
+import LoginBoundary from "./common/LoginBoundary";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
         <BrowserRouter>
           <MoralisProvider appId={moralisAppId} serverUrl={moralisServerUrl}>
             <TopBar />
-            <Routes />
+            <LoginBoundary>
+              <Routes />
+            </LoginBoundary>
           </MoralisProvider>
         </BrowserRouter>
       </ThemeProvider>
