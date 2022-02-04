@@ -1,13 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import TopBar from "./components/TopBar";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./Theme";
+import { BrowserRouter } from "react-router-dom";
+import Routes from "./common/RouteList";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Gurukul</h1>
-        <p>Under development</p>
-      </header>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <TopBar />
+          <Routes />
+        </BrowserRouter>
+      </ThemeProvider>
     </div>
   );
 }
