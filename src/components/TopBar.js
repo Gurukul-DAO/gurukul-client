@@ -1,26 +1,8 @@
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import WalletButton from "./WalletButton";
 
-export default function TopBar({ connectWallet, isConnected }) {
-  let connectBtn;
+export default function TopBar() {
 
-  if (isConnected) {
-    connectBtn = (
-      <Button color="success" style={{ float: "right" }} variant="outlined">
-        WALLET
-      </Button>
-    );
-  } else {
-    connectBtn = (
-      <Button
-        color="secondary"
-        style={{ float: "right" }}
-        variant="outlined"
-        onClick={connectWallet}
-      >
-        CONNECT
-      </Button>
-    );
-  }
 
   return (
     <Box sx={{ flexGrow: 1, boxShadow: 3 }}>
@@ -33,13 +15,12 @@ export default function TopBar({ connectWallet, isConnected }) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Box sx={{ flexGrow: 1 }}>
-            {connectBtn}
+            <WalletButton />
             <Button
               color="secondary"
               style={{ float: "right", marginRight: "15px" }}
               variant="outlined"
               disabled
-              onClick={connectWallet}
             >
               MY DASHBOARD
             </Button>
