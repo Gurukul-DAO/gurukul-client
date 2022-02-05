@@ -37,7 +37,7 @@ export default function SideNav({ dashboard }) {
         />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton component={Link} to={'/nfts'}>
         <ListItemIcon>
           <VerifiedUserIcon />
         </ListItemIcon>

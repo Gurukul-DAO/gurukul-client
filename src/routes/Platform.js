@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
 import CourseCard from "../components/CourseCard";
 import { theme } from "../Theme";
 

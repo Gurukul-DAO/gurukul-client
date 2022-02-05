@@ -11,11 +11,10 @@ export default function Dashboard() {
 
     return (
         <Container sx={{ mt: 2 }}>
-            
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabState} onChange={handleChange}>
-                    <Tab label="In Progress" {...a11yProps(0)} />
-                    <Tab label="Completed" {...a11yProps(1)} />
+                    <Tab label="NFT's Owned" {...a11yProps(0)} />
+                    <Tab label="NFT's Unclaimed" {...a11yProps(1)} />
                 </Tabs>
             </Box>
 
@@ -23,8 +22,17 @@ export default function Dashboard() {
                 <Grid item xs={12} sm={12} md={6} lg={4}>
                     <CourseCard
                         id="0"
-                        courseName="First Course"
-                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                        courseName="NFT for First Course"
+                        imageUrl="https://i.insider.com/6123e0324932030018457fa3?width=700" 
+                        nft />
+                </Grid>
+
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <CourseCard
+                        id="2"
+                        courseName="NFT for Second Course"
+                        imageUrl="https://media.alephbusiness.ro//2022/01/nft.jpeg"
+                        nft />
                 </Grid>
             </TabPanel>
 
@@ -32,27 +40,14 @@ export default function Dashboard() {
                 <Grid item xs={12} sm={12} md={6} lg={4}>
                     <CourseCard
                         id="1"
-                        courseName="First Completed Course"
-                        imageUrl="https://elearning.ihtsdotools.org/pluginfile.php/16835/mod_book/chapter/1798/figure_at_finish_line_13179.png"
-                        completed />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="2"
-                        courseName="Second Completed Course"
-                        imageUrl="https://flfilmacademy.com/wp-content/uploads/2015/08/Course-Completed.png" 
-                        completed />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="3"
-                        courseName="Third Completed Course"
-                        imageUrl="https://knilt.arcc.albany.edu/images/6/6a/Course_completion.png" 
-                        completed />
+                        courseName="NFT for Third Course"
+                        imageUrl="https://static.dw.com/image/57342486_303.jpg"
+                        nftUnclaimed />
                 </Grid>
             </TabPanel>
 
         </Container>);
+
 }
 
 function TabPanel(props) {
