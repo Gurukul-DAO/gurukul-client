@@ -12,7 +12,7 @@ export default function RouteList() {
   return (
     <Routes>
       <Route path="/" element={<Platform />}></Route>
-      <Route path="my-created-courses" element={<MyCreatedCourses />} />
+      <Route path="my-created-courses" element={<div><SideNav dashboard/><MyCreatedCourses /></div>} />
       <Route path="dashboard" element={<div><SideNav dashboard/><Dashboard /></div>} />
       <Route path="nfts" element={<div><SideNav dashboard/><MyNFTs /></div>} />
       <Route path="tokens" element={<div><SideNav dashboard/><MyTokens /></div>} />

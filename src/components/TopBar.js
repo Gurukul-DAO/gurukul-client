@@ -8,18 +8,6 @@ export default function TopBar() {
 
   const { isAuthenticated } = useMoralis();
 
-  let myDashboardButton;
-  let myCoursesButton;
-  if (isAuthenticated) {
-    myDashboardButton = <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
-      MY DASHBOARD
-    </Button>
-
-    myCoursesButton = <Button component={Link} to={'/my-created-courses'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
-      MY COURSES
-    </Button>
-  }
-
   return (
     <Box
       sx={{
@@ -38,9 +26,9 @@ export default function TopBar() {
           <Box sx={{ flexGrow: 1 }}>
             <WalletButton />
 
-            {myDashboardButton}
-            {myCoursesButton}
-
+            {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
+              MY DASHBOARD
+            </Button>}
           </Box>
         </Toolbar>
       </AppBar>

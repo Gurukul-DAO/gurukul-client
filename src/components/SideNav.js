@@ -11,6 +11,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { theme } from "../Theme";
 import { Link } from "react-router-dom";
+import { HistoryEdu } from "@mui/icons-material";
 
 export default function SideNav({ dashboard }) {
 
@@ -33,7 +34,16 @@ export default function SideNav({ dashboard }) {
           <SchoolIcon />
         </ListItemIcon>
         <ListItemText
-          primary="My Courses"
+          primary="Enrolled Courses"
+        />
+      </ListItemButton>
+
+      <ListItemButton component={Link} to={'/my-created-courses'}>
+        <ListItemIcon>
+          <HistoryEdu />
+        </ListItemIcon>
+        <ListItemText
+          primary="Created Courses"
         />
       </ListItemButton>
 
