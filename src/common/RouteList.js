@@ -4,12 +4,11 @@ import MyCreatedCourses from "../routes/MyCreatedCourses";
 import Platform from "../routes/Platform";
 
 export default function RouteList() {
+
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Platform />}></Route>
-        <Route path="my-created-courses" element={<MyCreatedCourses />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Platform />}></Route>
+      <Route path="my-created-courses" element={<MyCreatedCourses />} />
+    </Routes>
   );
 }

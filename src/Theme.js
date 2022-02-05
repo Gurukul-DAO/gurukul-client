@@ -11,6 +11,9 @@ export const theme = createTheme({
     },
     secondary: {
       main: '#3c3c3c',
+    },
+    drawer: {
+      width: 240,
     }
   },
 });
