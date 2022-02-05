@@ -11,7 +11,7 @@ export default function TopBar() {
   let myDashboardButton;
   let myCoursesButton;
   if (isAuthenticated) {
-    myDashboardButton = <Button style={{ float: "right", marginRight: "15px" }} variant="outlined" disabled>
+    myDashboardButton = <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
       MY DASHBOARD
     </Button>
 

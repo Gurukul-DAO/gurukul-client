@@ -3,8 +3,6 @@ import CourseCard from "../components/CourseCard";
 import { theme } from "../Theme";
 
 export default function Platform() {
-
-  console.log(theme.palette.background.paper);
   return (
     <Container sx={{ mt: 5 }}>
       <Grid container spacing={2}>
