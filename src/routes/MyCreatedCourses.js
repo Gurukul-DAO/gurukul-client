@@ -1,6 +1,8 @@
-import { Box, Card, CardContent, CardMedia, Collapse, Tab, Tabs, Typography } from "@mui/material";
+import { Check } from "@mui/icons-material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Collapse, Modal, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import { useMoralis } from "react-moralis";
+import { WatchVideoDialog } from "../components/WatchVideoDialog";
 import { getCreatedPrivateCourses, getCreatedPublishedCourses } from "../data/createdCourses";
 
 export default function MyCreatedCourses() {
@@ -23,37 +25,56 @@ export default function MyCreatedCourses() {
             </Tabs>
         </Box>
         <TabPanel value={tabState} index={0}>
-            {publishedCourseData.map((course) => <Course course={course} />)}
+            {publishedCourseData.map((course) => <Course course={course} key={course.id} />)}
         </TabPanel>
         <TabPanel value={tabState} index={1}>
-            {privateCourseData.map((course) => <Course course={course} />)}
+            {privateCourseData.map((course) => <Course course={course} key={course.id} />)}
         </TabPanel>
     </>;
 }
 
 function Course(props) {
-    const [expanded, setExpanded] = useState(true);
+
 
     return (
         <Card>
-            <h4>{props.course.name}</h4>
-            <CardContent>
-                {props.course.videos.map(video =>
-                    <Card sx={{ width: 200, height: 300, float: 'left', margin: 1 }}>
-                        <CardMedia
-                            component="img"
-                            height="194"
-                            image={"https://img.youtube.com/vi/" + video.youtubeId + "/0.jpg"}
-                            alt="Preview image"
-                        />
-                        <CardContent>
-                            {video.name}
-                        </CardContent>
-                    </Card>
-                )}
-            </CardContent>
+            {props.course.name}
+            {props.course.videos.map(video =>
+                <Video video={video} key={video.id} />
+            )}
         </Card>
     );
+}
+
+function Video(props) {
+    const [videoModalOpen, setVideoModalOpen] = useState(false);
+    const [videoWatched, setVideoWatched] = useState(false);
+
+    return (
+        <>
+            <Card sx={{ width: 200, height: 300, float: 'left', margin: 1 }}>
+                <CardActionArea>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={"https://img.youtube.com/vi/" + props.video.youtubeId + "/0.jpg"}
+                        alt="Preview image"
+                        onClick={() => setVideoModalOpen(true)}
+                    />
+                </CardActionArea>
+                <CardContent>
+                    {props.video.name}
+                    {videoWatched && <Check />}
+                </CardContent>
+            </Card>
+            <WatchVideoDialog
+                video={props.video}
+                open={videoModalOpen}
+                handleClose={() => setVideoModalOpen(false)}
+                handleVideoWatched={() => setVideoWatched(true)}
+            />
+        </>
+    )
 }
 
 function TabPanel(props) {
