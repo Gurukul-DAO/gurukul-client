@@ -17,7 +17,6 @@ export default function TopBar() {
           <Box sx={{ flexGrow: 1 }}>
             <WalletButton />
             <Button
-              color="secondary"
               style={{ float: "right", marginRight: "15px" }}
               variant="outlined"
               disabled
