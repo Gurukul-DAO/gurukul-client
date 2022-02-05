@@ -46,7 +46,7 @@ export default function SideNav({ dashboard }) {
         />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton component={Link} to={'/tokens'}>
         <ListItemIcon>
           <MonetizationOnIcon />
         </ListItemIcon>

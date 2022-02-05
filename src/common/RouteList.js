@@ -5,6 +5,7 @@ import Dashboard from "../routes/Dashboard";
 import MyCreatedCourses from "../routes/MyCreatedCourses";
 import Platform from "../routes/Platform";
 import MyNFTs from "../routes/MyNFTs";
+import MyTokens from "../routes/MyTokens";
 
 export default function RouteList() {
 
@@ -14,6 +15,7 @@ export default function RouteList() {
       <Route path="my-created-courses" element={<MyCreatedCourses />} />
       <Route path="dashboard" element={<div><SideNav dashboard/><Dashboard /></div>} />
       <Route path="nfts" element={<div><SideNav dashboard/><MyNFTs /></div>} />
+      <Route path="tokens" element={<div><SideNav dashboard/><MyTokens /></div>} />
     </Routes>
   );
 }
