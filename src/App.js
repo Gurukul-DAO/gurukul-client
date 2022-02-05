@@ -9,6 +9,7 @@ import { moralisServerUrl, moralisAppId } from "./credentials"
 import LoginBoundary from "./common/LoginBoundary";
 
 function App() {
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
