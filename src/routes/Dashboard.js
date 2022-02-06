@@ -98,7 +98,7 @@ export default function Dashboard() {
                         key={course.courseId.toNumber()}
                         courseId={course.courseId}
                         courseName={course.name}
-                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                        imageUrl={course.imageURL} />
                 </Grid>
             ))
         );
@@ -112,7 +112,7 @@ export default function Dashboard() {
                         key={course.courseId}
                         courseId={course.courseId}
                         courseName={course.name}
-                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                        imageUrl={course.imageURL} />
                 </Grid>
             ))
         );

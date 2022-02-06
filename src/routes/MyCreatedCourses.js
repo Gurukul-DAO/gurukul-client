@@ -15,6 +15,7 @@ export default function MyCreatedCourses() {
     const [errorSnackState, setErrorSnackState] = useState(false);
     const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState(false);
     const [newCourseName, setNewCourseName] = useState('');
+    const [newImageAddress, setNewImageAddress] = useState('');
     const { user, enableWeb3, isWeb3Enabled } = useMoralis();
     const [privateCourseData, setPrivateCourseData] = useState(getCreatedPrivateCourses(user.get("ethAddress")));
 
@@ -63,8 +64,8 @@ export default function MyCreatedCourses() {
             <TabPanel value={tabState} index={0}>
                 <Grid container spacing={2} sx={{ mt: 1 }}>
                     {publishedCourses && publishedCourses
-                    .filter(course => course.creator.toUpperCase() === user.attributes.ethAddress.toUpperCase() )
-                    .map((course) => <Course course={course} key={course.courseId} />)}
+                        .filter(course => course.creator.toUpperCase() === user.attributes.ethAddress.toUpperCase())
+                        .map((course) => <Course course={course} key={course.courseId} />)}
                 </Grid>
                 <Box sx={{ display: 'flex', float: 'right' }}>
                     <Fab color="primary" aria-label="add" onClick={() => { setNewCourseName(''); setCreateCourseDialogOpen(true) }}>
@@ -82,13 +83,14 @@ export default function MyCreatedCourses() {
             open={createCourseDialogOpen}
             newCourseName={newCourseName}
             handleChange={(event) => setNewCourseName(event.target.value)}
+            handleImageChange={(event) => setNewImageAddress(event.target.value)}
             handleClose={() => setCreateCourseDialogOpen(false)}
             handleSubmit={() => {
                 setCreateCourseDialogOpen(false);
                 fetchApproveTokens({ throwOnError: true })
                     .then(
                         () => fetchCreateCourse({
-                            params: { params: { name: newCourseName } },
+                            params: { params: { name: newCourseName, _imageURL: newImageAddress } },
                             throwOnError: true
                         })
                     )
@@ -114,7 +116,7 @@ function Course(props) {
                 <CourseCard
                     courseId={props.course.courseId}
                     courseName={props.course.name}
-                    imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                    imageUrl= {props.course.imageURL} />
             </Grid>
         </>
     );
@@ -129,6 +131,12 @@ function NewCourseDialog(props) {
                     placeholder="Course name"
                     value={props.newCourseName}
                     onChange={props.handleChange}
+                    required /><br /><br />
+
+                <TextField
+                    placeholder="Image address"
+                    value={props.imageAddress}
+                    onChange={props.handleImageChange}
                     required />
             </DialogContent>
             <DialogActions>
