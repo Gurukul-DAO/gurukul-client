@@ -11,7 +11,7 @@ export default function Dashboard() {
     const [completedCourses, setCompletedCourses] = useState(undefined);
     const [inProgressCourses, setInProgressCourses] = useState(undefined);
 
-    const { enableWeb3, isWeb3Enabled, user} = useMoralis();
+    const { enableWeb3, isWeb3Enabled, user } = useMoralis();
 
     const { data: allCoursesList, fetch: fetchAllCourses } = useWeb3ExecuteFunction({
         abi: GurukulABI,
@@ -25,7 +25,7 @@ export default function Dashboard() {
         functionName: "getStudentCompletedCourses",
         params: {
             studentAddress: user.attributes.ethAddress,
-          },
+        },
     });
 
     const { data: allCoursesStudentList, fetch: fetchAllStudentCourses } = useWeb3ExecuteFunction({
@@ -34,7 +34,7 @@ export default function Dashboard() {
         functionName: "getStudentCourse",
         params: {
             studentAddress: user.attributes.ethAddress,
-          },
+        },
     });
 
     const handleChange = (event, newValue) => {
@@ -48,72 +48,71 @@ export default function Dashboard() {
         const init = async () => {
             fetchAllCourses();
 
-            if(user) {
+            if (user) {
                 fetchAllStudentCourses();
                 fetchCompletedCourses();
             }
 
             //Set in progress courses
-            if(allCoursesList && allCoursesStudentList) {
+            if (allCoursesList && allCoursesStudentList && completedCoursesList) {
                 let tempInProgressCourses = []
-                allCoursesList.forEach(course  => {
-                    allCoursesStudentList.forEach(studentCourseId => {
-                        if(course[1].eq(studentCourseId)) {
-                            tempInProgressCourses.push(course);
-                        }
-                    });
-                })
-                setInProgressCourses(tempInProgressCourses);
-            }
-
-            //Set completed courses
-            if(allCoursesList && completedCoursesList) {
                 let tempCompletedCourses = []
-                allCoursesList.forEach(course  => {
-                    completedCoursesList.forEach(studentCourseId => {
-                        if(course[1].eq(studentCourseId)) {
-                            tempCompletedCourses.push(course);
+                allCoursesList.forEach(course => {
+                    allCoursesStudentList.forEach(studentCourseId => {
+                        if (course[1].eq(studentCourseId)) {
+                            let isCompleted = false
+                            completedCoursesList.forEach(completedCourseId => {
+                                if(completedCourseId.eq(studentCourseId)) {
+                                    isCompleted = true;
+                                }
+                            });
+                            if(isCompleted) {
+                                tempCompletedCourses.push(course);
+                            } else {
+                                tempInProgressCourses.push(course);
+                            }
                         }
                     });
                 })
                 setCompletedCourses(tempCompletedCourses);
+                setInProgressCourses(tempInProgressCourses);
             }
         };
 
         init();
-      }, [user, enableWeb3, isWeb3Enabled, completedCoursesList, allCoursesList,allCoursesStudentList, fetchCompletedCourses, fetchAllCourses, fetchAllStudentCourses]);
+    }, [user, enableWeb3, isWeb3Enabled, completedCoursesList, allCoursesList, allCoursesStudentList, fetchCompletedCourses, fetchAllCourses, fetchAllStudentCourses]);
 
-      let completedCoursesComponents = [];
-      let inProgressCoursesComponents = [];
+    let completedCoursesComponents = [];
+    let inProgressCoursesComponents = [];
 
 
-      if(completedCourses) {
-          completedCoursesComponents.push(
-              completedCourses.map((course, i) => (
-                  <Grid item xs={12} sm={12} md={6} lg={4}>
-                  <CourseCard
-                      id={course.id}
-                      courseName={course.name}
-                      imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
-              </Grid>
-              ))
-          );
-      }
+    if (completedCourses) {
+        completedCoursesComponents.push(
+            completedCourses.map((course, i) => (
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <CourseCard
+                        id={course.id}
+                        courseName={course.name}
+                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                </Grid>
+            ))
+        );
+    }
 
-      if(inProgressCourses) {
+    if (inProgressCourses) {
         inProgressCoursesComponents.push(
             inProgressCourses.map((course, i) => (
-                  <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
-                  <CourseCard
-                      id={course.id}
-                      courseName={course.name}
-                      imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
-              </Grid>
-              ))
-          );
-      }
+                <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
+                    <CourseCard
+                        id={course.id}
+                        courseName={course.name}
+                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+                </Grid>
+            ))
+        );
+    }
 
-    
+
     return (
         <Container sx={{ mt: 2 }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
