@@ -8,14 +8,33 @@ import { gurukulContractAddress } from "../credentials";
 
 export default function Dashboard() {
     const [tabState, setTabState] = useState(0);
-    const [courses, setCourses] = useState(undefined);
+    const [completedCourses, setCompletedCourses] = useState(undefined);
+    const [inProgressCourses, setInProgressCourses] = useState(undefined);
 
-    const { enableWeb3, isWeb3Enabled} = useMoralis();
+    const { enableWeb3, isWeb3Enabled, user} = useMoralis();
 
-    const { data, fetch } = useWeb3ExecuteFunction({
+    const { data: allCoursesList, fetch: fetchAllCourses } = useWeb3ExecuteFunction({
         abi: GurukulABI,
         contractAddress: gurukulContractAddress,
         functionName: "getAllCourses"
+    });
+
+    const { data: completedCoursesList, fetch: fetchCompletedCourses } = useWeb3ExecuteFunction({
+        abi: GurukulABI,
+        contractAddress: gurukulContractAddress,
+        functionName: "getStudentCompletedCourses",
+        params: {
+            studentAddress: user.attributes.ethAddress,
+          },
+    });
+
+    const { data: allCoursesStudentList, fetch: fetchAllStudentCourses } = useWeb3ExecuteFunction({
+        abi: GurukulABI,
+        contractAddress: gurukulContractAddress,
+        functionName: "getStudentCourse",
+        params: {
+            studentAddress: user.attributes.ethAddress,
+          },
     });
 
     const handleChange = (event, newValue) => {
@@ -27,27 +46,72 @@ export default function Dashboard() {
             enableWeb3();
         }
         const init = async () => {
-            fetch();
-            setCourses(data);
+            fetchCompletedCourses();
+            fetchAllCourses();
+
+            if(user) {
+                fetchAllStudentCourses();
+            }
+
+            //Set in progress courses
+            if(allCoursesList && allCoursesStudentList) {
+                let tempInProgressCourses = []
+                allCoursesList.forEach(course  => {
+                    allCoursesStudentList.forEach(studentCourseId => {
+                        if(course[1].eq(studentCourseId)) {
+                            tempInProgressCourses.push(course);
+                        }
+                    });
+                })
+                setInProgressCourses(tempInProgressCourses);
+            }
+
+            //Set completed courses
+            if(allCoursesList && completedCoursesList) {
+                let tempCompletedCourses = []
+                allCoursesList.forEach(course  => {
+                    completedCoursesList.forEach(studentCourseId => {
+                        if(course[1].eq(studentCourseId)) {
+                            tempCompletedCourses.push(course);
+                        }
+                    });
+                })
+                setCompletedCourses(tempCompletedCourses);
+            }
         };
 
         init();
-      }, [enableWeb3, isWeb3Enabled, data, fetch]);
+      }, [user, enableWeb3, isWeb3Enabled, completedCoursesList, allCoursesList,allCoursesStudentList, fetchCompletedCourses, fetchAllCourses, fetchAllStudentCourses]);
 
-    let coursesList = []
+      let completedCoursesComponents = [];
+      let inProgressCoursesComponents = [];
 
-    if(courses) {
-        coursesList.push(
-            courses.map((course, i) => (
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                <CourseCard
-                    id={course.id}
-                    courseName={course.name}
-                    imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
-            </Grid>
-            ))
-        );
-    }
+
+      if(completedCourses) {
+          completedCoursesComponents.push(
+              completedCourses.map((course, i) => (
+                  <Grid item xs={12} sm={12} md={6} lg={4}>
+                  <CourseCard
+                      id={course.id}
+                      courseName={course.name}
+                      imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+              </Grid>
+              ))
+          );
+      }
+
+      if(inProgressCourses) {
+        inProgressCoursesComponents.push(
+            inProgressCourses.map((course, i) => (
+                  <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
+                  <CourseCard
+                      id={course.id}
+                      courseName={course.name}
+                      imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
+              </Grid>
+              ))
+          );
+      }
 
     
     return (
@@ -60,37 +124,11 @@ export default function Dashboard() {
             </Box>
 
             <TabPanel value={tabState} index={0}>
-                {/* <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="0"
-                        courseName="First Course"
-                        imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
-                </Grid> */}
-                {coursesList}
+                {inProgressCoursesComponents}
             </TabPanel>
 
             <TabPanel value={tabState} index={1}>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="1"
-                        courseName="First Completed Course"
-                        imageUrl="https://elearning.ihtsdotools.org/pluginfile.php/16835/mod_book/chapter/1798/figure_at_finish_line_13179.png"
-                        completed />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="2"
-                        courseName="Second Completed Course"
-                        imageUrl="https://flfilmacademy.com/wp-content/uploads/2015/08/Course-Completed.png"
-                        completed />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="3"
-                        courseName="Third Completed Course"
-                        imageUrl="https://knilt.arcc.albany.edu/images/6/6a/Course_completion.png"
-                        completed />
-                </Grid>
+                {completedCoursesComponents}
             </TabPanel>
 
         </Container>);
@@ -122,29 +160,3 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-
-// async function getAllCourses() {
-    // let options = {
-    //     contractAddress: "0x64cf7010Aaf511e69216Cd099271DAC604Ee9005",
-    //     functionName: "getAllCourses",
-    //     abi: GurukulABI
-    // };
-
-
-
-    
-
-    // return ShowUniswapObserveValues
-    // const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction({
-    //     abi: GurukulABI,
-    //     contractAddress: usdcEthPoolAddress,
-    //     functionName: "observe",
-    //     params: {
-    //       secondsAgos: [0, 10],
-    //     },
-    //   });
-
-    // const response = await Moralis.executeFunction(options);
-
-    // console.log(response);
-// }
