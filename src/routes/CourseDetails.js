@@ -10,8 +10,8 @@ import { guruContractAddress, gurukulContractAddress } from "../credentials";
 export default function CourseDetails() {
     let { courseId } = useParams();
     const [course, setCourse] = useState(undefined);
-    const [isCompleted, setIsCompleted] = useState(false);
-    const [isInProgress, setIsInProgress] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(undefined);
+    const [isInProgress, setIsInProgress] = useState(undefined);
 
     const { enableWeb3, isWeb3Enabled, user } = useMoralis();
 
@@ -100,7 +100,9 @@ export default function CourseDetails() {
                                 });
                                 if (isCompleted) {
                                     setIsCompleted(true);
+                                    setIsInProgress(false);
                                 } else {
+                                    setIsCompleted(false);
                                     setIsInProgress(true)
                                 }
                             }
@@ -110,8 +112,11 @@ export default function CourseDetails() {
             }
         };
 
-        init();
-    }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses]);
+        if (!course || isCompleted === undefined || isInProgress === undefined) {
+            init();
+        }
+
+    }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses, course, isCompleted, isInProgress]);
 
     const renderActions = () => {
         if (!isInProgress && !isCompleted) {
@@ -121,11 +126,11 @@ export default function CourseDetails() {
             }}>Buy for $GURU 50 </Button>
         } else if (isInProgress) {
             return <div>
-                <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br/>
+                <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br />
                 <Button variant="contained" onClick={() => {
-                fetchApproveTokens({ throwOnError: true })
-                completeCourse({ throwOnError: true })
-            }}>Complete Course</Button>
+                    fetchApproveTokens({ throwOnError: true })
+                    completeCourse({ throwOnError: true })
+                }}>Complete Course</Button>
             </div>
         } else if (isCompleted) {
             return <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course Completed" variant="outlined" />
