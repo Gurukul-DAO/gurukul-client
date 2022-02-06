@@ -176,34 +176,34 @@ export default function CourseDetails() {
 
     <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
         <Video video={{
-            name: "Guitar Course",
-            youtubeId: "KVopQ0PrERk",
+            name: "Practice Chords",
+            youtubeId: "M7QVNKUry18",
             isPurchased: isInProgress || isCompleted
-        }} key={'KVopQ0PrERk'} />
+        }} key={'M7QVNKUry18'} />
     </Grid>
 
     <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
         <Video video={{
-            name: "Tattoo Course",
-            youtubeId: "nOLHPrMHX7w",
+            name: "Chords Basic",
+            youtubeId: "1Y-9iPNXFQo",
             isPurchased: isInProgress || isCompleted
-        }} key={'nOLHPrMHX7w'} />
+        }} key={'1Y-9iPNXFQo'} />
     </Grid>
 
     <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
         <Video video={{
-            name: "Photography Course",
-            youtubeId: "bDH4u9e1IfE",
+            name: "Full Song",
+            youtubeId: "xeOEwtgKAcI",
             isPurchased: isInProgress || isCompleted
-        }} key={'bDH4u9e1IfE'} />
+        }} key={'xeOEwtgKAcI'} />
     </Grid>
 
     <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
         <Video video={{
-            name: "Learn Courses",
-            youtubeId: "po_DXGPlRV0",
+            name: "Guitar Video Lesson",
+            youtubeId: "_-jTPU8xWy0",
             isPurchased: isInProgress || isCompleted
-        }} key={'po_DXGPlRV0'} />
+        }} key={'_-jTPU8xWy0'} />
     </Grid>
 
 </Grid>
