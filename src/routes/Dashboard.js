@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import GurukulABI from "../abis/GurukulABI";
 import CourseCard from "../components/CourseCard";
+import { gurukulContractAddress } from "../credentials";
 
 
 export default function Dashboard() {
@@ -13,7 +14,7 @@ export default function Dashboard() {
 
     const { data, fetch } = useWeb3ExecuteFunction({
         abi: GurukulABI,
-        contractAddress: '0x64cf7010Aaf511e69216Cd099271DAC604Ee9005',
+        contractAddress: gurukulContractAddress,
         functionName: "getAllCourses"
     });
 

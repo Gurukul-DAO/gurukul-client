@@ -1,0 +1,1 @@
+export const creatorStake = "100000000000000000000";
