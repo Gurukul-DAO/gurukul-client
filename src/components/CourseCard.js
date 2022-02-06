@@ -6,8 +6,12 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
 
 import { Link as RouterLink } from "react-router-dom";
+import { useNftPort } from "../common/NftPort";
+import { useMoralis } from "react-moralis";
 
 export default function CourseCard({ courseId, courseName, imageUrl, completed, nft, nftUnclaimed }) {
+  const { mintNft } = useNftPort();
+  const { user } = useMoralis();
 
   let courseActions = [];
   if (completed) {
@@ -28,7 +32,14 @@ export default function CourseCard({ courseId, courseName, imageUrl, completed, 
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Button color="primary" sx={{ width: '100%', height: '100%', padding: 0 }} startIcon={<VerifiedUserIcon />}>
+          <Button color="primary" sx={{ width: '100%', height: '100%', padding: 0 }} startIcon={<VerifiedUserIcon />}
+            onClick={() => {
+              mintNft(
+                courseName,
+                `Congratulations on completing your Gurukul course '${courseName}'!`,
+                `https://www.gurukul.cicio.dev/NFT_${Math.ceil(Math.random() * 3)}.jpg`,
+                user.get("ethAddress"))
+            }}>
             MINT NFT
           </Button >
         </Grid>
