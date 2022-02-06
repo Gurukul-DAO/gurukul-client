@@ -29,6 +29,15 @@ export default function MyTokens() {
         },
     });
 
+    const { data: completedCoursesList, fetch: fetchCompletedCourses } = useWeb3ExecuteFunction({
+        abi: GurukulABI,
+        contractAddress: gurukulContractAddress,
+        functionName: "getStudentCompletedCourses",
+        params: {
+            studentAddress: user.attributes.ethAddress,
+        },
+    });
+
     useEffect(() => {
         if (!isWeb3Enabled) {
             enableWeb3();
@@ -37,19 +46,33 @@ export default function MyTokens() {
             if (user) {
                 getGuruBalance();
                 getAllStudentCourses();
+                fetchCompletedCourses();
             }
-            
+
             setGuruOwn(guruBalance);
 
-            if(allCoursesStudentList) {
-                setGuruStaked(allCoursesStudentList.length*50);
+            if (allCoursesStudentList && completedCoursesList) {
+                let total = 0;
+                for (let course of allCoursesStudentList) {
+                    let found = false;
+                    for (let completedCourse of completedCoursesList) {
+                        if (course.eq(completedCourse)) {
+                            found = true;
+                        }
+                    }
+                    if(!found) {
+                        total = total + 1;
+                    }
+                }
+                setGuruStaked(total * 50);
             }
         };
 
         if (!guruOwn || !guruStacked) {
             init();
         }
-    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn, guruStacked, allCoursesStudentList, getAllStudentCourses]);
+
+    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn, guruStacked, allCoursesStudentList, getAllStudentCourses, completedCoursesList, fetchCompletedCourses]);
 
 
     return (
@@ -61,7 +84,7 @@ export default function MyTokens() {
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                     <Chip sx={{ fontSize: 30, height: 45 }} color="primary" label="$GURU STAKED" variant="outlined" /><br />
-                    <Chip sx={{ fontSize: 15 }} color="primary" label={"$GURU ".concat(guruStacked ? guruStacked: 0)} variant="outlined" />
+                    <Chip sx={{ fontSize: 15 }} color="primary" label={"$GURU ".concat(guruStacked ? guruStacked : 0)} variant="outlined" />
                 </Grid>
             </Grid>
         </Container>)
