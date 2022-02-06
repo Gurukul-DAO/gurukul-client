@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import GurukulABI from "../abis/GurukulABI";
 import CourseCard from "../components/CourseCard";
+import { gurukulContractAddress } from "../credentials";
 import { theme } from "../Theme";
 
 export default function Platform() {
@@ -10,7 +11,7 @@ export default function Platform() {
   const { enableWeb3, isWeb3Enabled } = useMoralis();
   const { data, fetch } = useWeb3ExecuteFunction({
     abi: GurukulABI,
-    contractAddress: '0x64cf7010Aaf511e69216Cd099271DAC604Ee9005',
+    contractAddress: gurukulContractAddress,
     functionName: "getAllCourses"
   });
 
@@ -33,7 +34,7 @@ export default function Platform() {
       courses.map((course, i) => (
         <Grid item xs={12} sm={12} md={6} lg={4}>
           <CourseCard
-            id={course.id}
+            courseId={course.courseId}
             courseName={course.name}
             imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
         </Grid>
@@ -47,7 +48,6 @@ export default function Platform() {
         {coursesList}
         <Grid item xs={12} sm={12} md={6} lg={4}>
           <CourseCard
-            id="1"
             courseName="First Course"
             imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
         </Grid>

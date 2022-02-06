@@ -89,9 +89,12 @@ export default function Dashboard() {
     if (completedCourses) {
         completedCoursesComponents.push(
             completedCourses.map((course, i) => (
-                <Grid item xs={12} sm={12} md={6} lg={4}>
+                
+                <Grid item xs={12} sm={12} md={6} lg={4} key={course.courseId}>
                     <CourseCard
-                        id={course.id}
+                        completed
+                        key={course.courseId}
+                        courseId={course.courseId}
                         courseName={course.name}
                         imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
                 </Grid>
@@ -102,9 +105,10 @@ export default function Dashboard() {
     if (inProgressCourses) {
         inProgressCoursesComponents.push(
             inProgressCourses.map((course, i) => (
-                <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
+                <Grid item xs={12} sm={12} md={6} lg={4} key={course.courseId}>
                     <CourseCard
-                        id={course.id}
+                        key={course.courseId}
+                        courseId={course.courseId}
                         courseName={course.name}
                         imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
                 </Grid>

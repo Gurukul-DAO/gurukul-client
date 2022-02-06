@@ -112,7 +112,7 @@ function Course(props) {
         <>
             <Grid item xs={12} sm={12} md={6} lg={4}>
                 <CourseCard
-                    id={props.course.id}
+                    courseId={props.course.courseId}
                     courseName={props.course.name}
                     imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
             </Grid>

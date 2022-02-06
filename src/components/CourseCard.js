@@ -5,6 +5,8 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
 
+import { Link as RouterLink } from "react-router-dom";
+
 export default function CourseCard({ courseId, courseName, imageUrl, completed, nft, nftUnclaimed }) {
 
   let courseActions = [];
@@ -54,7 +56,7 @@ export default function CourseCard({ courseId, courseName, imageUrl, completed, 
       }}
       variant="outlined"
     >
-      <CardActionArea>
+      <CardActionArea component={RouterLink} to={"/course/".concat(courseId || 1)}>
         <CardMedia
           component="img"
           height="300"
