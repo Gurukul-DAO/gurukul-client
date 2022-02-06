@@ -1,13 +1,34 @@
 import { Box, Container, Grid, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
+import { getMintedNfts } from "../common/NftPort";
 import CourseCard from "../components/CourseCard";
 
 export default function Dashboard() {
     const [tabState, setTabState] = useState(0);
+    const { user } = useMoralis();
+    const [nftList, setNftList] = useState([]);
 
     const handleChange = (event, newValue) => {
         setTabState(newValue);
     };
+
+    useEffect(() => {
+        async function getNftList() {
+            let nfts = await getMintedNfts();
+            let responseJson = await nfts.json();
+            console.log(responseJson);
+            if (responseJson["response"] !== "OK") {
+                throw new Error("Error fetching minted NFTs!");
+            }
+
+            const userName = user.get("ethAddress").toUpperCase();
+            let myNfts = responseJson.minted_nfts.filter(entry => entry.mint_to_address.toUpperCase() === userName);
+
+            setNftList(myNfts);
+        }
+        getNftList();
+    }, [user]);
 
     return (
         <Container sx={{ mt: 2 }}>
@@ -19,21 +40,7 @@ export default function Dashboard() {
             </Box>
 
             <TabPanel value={tabState} index={0}>
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="0"
-                        courseName="NFT for First Course"
-                        imageUrl="https://i.insider.com/6123e0324932030018457fa3?width=700" 
-                        nft />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={6} lg={4}>
-                    <CourseCard
-                        id="2"
-                        courseName="NFT for Second Course"
-                        imageUrl="https://media.alephbusiness.ro//2022/01/nft.jpeg"
-                        nft />
-                </Grid>
+                {nftList && nftList.map(e => <NftCard nft={e} key={`nftcard-${e.token_id}`} />)}
             </TabPanel>
 
             <TabPanel value={tabState} index={1}>
@@ -48,6 +55,30 @@ export default function Dashboard() {
 
         </Container>);
 
+}
+
+function NftCard(props) {
+    const [imageUri, setImageUri] = useState("https://i.insider.com/6123e0324932030018457fa3?width=700");
+    const [courseName, setCourseName] = useState("Loading...");
+    useEffect(() => {
+        async function getNftData() {
+            let ipfsUri = props.nft.metadata_uri.replace("ipfs://", "https://ipfs.io/ipfs/");
+            let metadata = await fetch(ipfsUri);
+            let metadataJson = await metadata.json();
+            setCourseName(metadataJson.name);
+            setImageUri(metadataJson.image);
+        }
+
+        getNftData();
+    });
+    return (
+        <Grid item xs={12} sm={12} md={6} lg={4}>
+            <CourseCard
+                courseName={courseName}
+                imageUrl={imageUri}
+                nft />
+        </Grid>
+    );
 }
 
 function TabPanel(props) {

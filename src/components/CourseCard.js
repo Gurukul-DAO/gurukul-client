@@ -6,11 +6,10 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
 
 import { Link as RouterLink } from "react-router-dom";
-import { useNftPort } from "../common/NftPort";
+import { mintNft } from "../common/NftPort";
 import { useMoralis } from "react-moralis";
 
 export default function CourseCard({ courseId, courseName, imageUrl, completed, nft, nftUnclaimed }) {
-  const { mintNft } = useNftPort();
   const { user } = useMoralis();
 
   let courseActions = [];
