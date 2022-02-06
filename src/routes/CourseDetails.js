@@ -118,7 +118,7 @@ export default function CourseDetails() {
             return <Button variant="outlined" onClick={() => {
                 fetchApproveTokens({ throwOnError: true })
                 joinCourse({ throwOnError: true })
-            }}>Join Course</Button>
+            }}>Buy for $GURU 50 </Button>
         } else if (isInProgress) {
             return <div>
                 <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br/>

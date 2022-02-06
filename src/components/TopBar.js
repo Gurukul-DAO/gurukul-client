@@ -29,6 +29,9 @@ export default function TopBar() {
             {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
               MY DASHBOARD
             </Button>}
+            {isAuthenticated && <Button component={Link} to={'/'} style={{ float: "right", marginRight: "15px" }} variant="text">
+              EXPLORE
+            </Button>}
           </Box>
         </Toolbar>
       </AppBar>
