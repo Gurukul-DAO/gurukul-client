@@ -49,7 +49,7 @@ export default function MyTokens() {
         if (!guruOwn || !guruStacked) {
             init();
         }
-    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn, guruStacked, allCoursesStudentList, getAllStudentCourses, allCoursesStudentList]);
+    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn, guruStacked, allCoursesStudentList, getAllStudentCourses]);
 
 
     return (

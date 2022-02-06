@@ -52,7 +52,7 @@ export default function CourseDetails() {
         },
     });
 
-    const { data, fetch: completeCourse, isFetching, isLoading } = useWeb3ExecuteFunction({
+    const { fetch: completeCourse } = useWeb3ExecuteFunction({
         abi: GurukulABI,
         contractAddress: gurukulContractAddress,
         functionName: "completeCourse",
