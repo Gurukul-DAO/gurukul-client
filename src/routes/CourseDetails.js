@@ -1,4 +1,4 @@
-import { Button, Chip, Container, Typography } from "@mui/material";
+import { Alert, Button, Chip, Container, Snackbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,10 @@ export default function CourseDetails() {
     const [course, setCourse] = useState(undefined);
     const [isCompleted, setIsCompleted] = useState(undefined);
     const [isInProgress, setIsInProgress] = useState(undefined);
+    const [isMounted, setIsMounted] = useState(false);
+
+    const [successSnackState, setSuccessSnackState] = useState(false);
+    const [errorSnackState, setErrorSnackState] = useState(false);
 
     const { enableWeb3, isWeb3Enabled, user } = useMoralis();
 
@@ -48,7 +52,7 @@ export default function CourseDetails() {
         },
     });
 
-    const { fetch: completeCourse } = useWeb3ExecuteFunction({
+    const { data, fetch: completeCourse, isFetching, isLoading } = useWeb3ExecuteFunction({
         abi: GurukulABI,
         contractAddress: gurukulContractAddress,
         functionName: "completeCourse",
@@ -88,48 +92,70 @@ export default function CourseDetails() {
             }
 
             if (allCourses && allCoursesStudentList && completedCoursesList) {
-                allCourses.forEach(course => {
-                    allCoursesStudentList.forEach(studentCourseId => {
-                        if (course[1].eq(courseId)) {
+                for (let course of allCourses) {
+
+                    if (course[1].eq(courseId)) {
+                        let inProgress = false;
+                        let isCompleted = false;
+
+                        for (let studentCourseId of allCoursesStudentList) {
                             if (course[1].eq(studentCourseId)) {
-                                let isCompleted = false
-                                completedCoursesList.forEach(completedCourseId => {
-                                    if (completedCourseId.eq(studentCourseId)) {
-                                        isCompleted = true;
-                                    }
-                                });
-                                if (isCompleted) {
-                                    setIsCompleted(true);
-                                    setIsInProgress(false);
-                                } else {
-                                    setIsCompleted(false);
-                                    setIsInProgress(true)
-                                }
+                                inProgress = true;
+                                break;
                             }
                         }
-                    });
-                })
+
+                        for (let completedCourseId of completedCoursesList) {
+                            if (course[1].eq(completedCourseId)) {
+                                isCompleted = true;
+                                break;
+                            }
+                        }
+
+                        setIsInProgress(inProgress);
+                        setIsCompleted(isCompleted);
+                        break;
+                    }
+                }
             }
         };
 
-        if (!course || isCompleted === undefined || isInProgress === undefined) {
+        if (!isMounted || !course || isCompleted === undefined || isInProgress === undefined) {
             init();
+            setIsMounted(true);
         }
 
-    }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses, course, isCompleted, isInProgress]);
+    }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses, course, isCompleted, isInProgress, isMounted]);
 
     const renderActions = () => {
-        if (!isInProgress && !isCompleted) {
+        if (isInProgress=== false && isCompleted === false) {
             return <Button variant="outlined" onClick={() => {
                 fetchApproveTokens({ throwOnError: true })
-                joinCourse({ throwOnError: true })
+                    .then(async () => {
+                        await joinCourse({ throwOnError: true })
+                    })
+                    .then(() => {
+                        setIsMounted(false);
+                        setSuccessSnackState(true);
+                    })
+                    .catch((error) => { console.error(error); setErrorSnackState(true) });
             }}>Buy for $GURU 50 </Button>
-        } else if (isInProgress) {
+        } else if (isInProgress && !isCompleted) {
             return <div>
                 <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br />
                 <Button variant="contained" onClick={() => {
                     fetchApproveTokens({ throwOnError: true })
-                    completeCourse({ throwOnError: true })
+                        .then(async () => {
+                            await completeCourse({ throwOnError: true })
+                        })
+                        .then(() => {
+                            setSuccessSnackState(true);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            setErrorSnackState(true)
+                        }
+                        );
                 }}>Complete Course</Button>
             </div>
         } else if (isCompleted) {
@@ -141,5 +167,12 @@ export default function CourseDetails() {
         <Container sx={{ mt: 2 }}>
             <Typography variant="h4">{course && course[2]}</Typography>
             {renderActions()}
+
+            <Snackbar open={successSnackState} autoHideDuration={5000} onClose={() => setSuccessSnackState(false)}>
+                <Alert severity="success" sx={{ width: '100%' }}>Successfull transaction!</Alert>
+            </Snackbar>
+            <Snackbar open={errorSnackState} autoHideDuration={5000} onClose={() => setErrorSnackState(false)}>
+                <Alert severity="error" sx={{ width: '100%' }}>Transaction failed!</Alert>
+            </Snackbar>
         </Container>);
 }

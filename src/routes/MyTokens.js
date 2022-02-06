@@ -1,12 +1,13 @@
 import { Chip, Container, Grid } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import GuruABI from "../abis/GuruABI";
+import GurukulABI from "../abis/GurukulABI";
 import { guruContractAddress, gurukulContractAddress } from "../credentials";
 
 export default function MyTokens() {
-    const isMounted = useRef(false);
     const [guruOwn, setGuruOwn] = useState(undefined);
+    const [guruStacked, setGuruStaked] = useState(undefined);
 
     const { enableWeb3, isWeb3Enabled, user } = useMoralis();
 
@@ -19,6 +20,15 @@ export default function MyTokens() {
         }
     })
 
+    const { data: allCoursesStudentList, fetch: getAllStudentCourses } = useWeb3ExecuteFunction({
+        abi: GurukulABI,
+        contractAddress: gurukulContractAddress,
+        functionName: "getStudentCourse",
+        params: {
+            studentAddress: user.attributes.ethAddress,
+        },
+    });
+
     useEffect(() => {
         if (!isWeb3Enabled) {
             enableWeb3();
@@ -26,18 +36,20 @@ export default function MyTokens() {
         const init = async () => {
             if (user) {
                 getGuruBalance();
-                setGuruOwn(guruBalance);
+                getAllStudentCourses();
+            }
+            
+            setGuruOwn(guruBalance);
+
+            if(allCoursesStudentList) {
+                setGuruStaked(allCoursesStudentList.length*50);
             }
         };
 
-        if (!guruOwn) {
+        if (!guruOwn || !guruStacked) {
             init();
         }
-        
-        return () => {
-            isMounted.current = true;
-        };
-    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn]);
+    }, [user, enableWeb3, isWeb3Enabled, getGuruBalance, guruBalance, guruOwn, guruStacked, allCoursesStudentList, getAllStudentCourses, allCoursesStudentList]);
 
 
     return (
@@ -49,7 +61,7 @@ export default function MyTokens() {
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                     <Chip sx={{ fontSize: 30, height: 45 }} color="primary" label="$GURU STAKED" variant="outlined" /><br />
-                    <Chip sx={{ fontSize: 15 }} color="primary" label={"$GURU ".concat(0)} variant="outlined" />
+                    <Chip sx={{ fontSize: 15 }} color="primary" label={"$GURU ".concat(guruStacked ? guruStacked: 0)} variant="outlined" />
                 </Grid>
             </Grid>
         </Container>)
