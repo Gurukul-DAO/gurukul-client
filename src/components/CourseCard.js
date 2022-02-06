@@ -15,8 +15,8 @@ export default function CourseCard({ courseId, courseName, imageUrl, completed, 
 
   let courseActions = [];
   if (completed) {
-    courseActions.push(<Divider width="100%" />)
-    courseActions.push(<CardActions sx={{ padding: 0 }}>
+    courseActions.push(<Divider key = {'divider'.concat(courseId)} width="100%" />)
+    courseActions.push(<CardActions key = {'cardActions1'.concat(courseId)} sx={{ padding: 0 }}>
       <Grid container spacing={0}>
 
         <Grid item xs={6} sm={6} md={6} lg={6} sx={{ margin: 0 }}>
@@ -46,7 +46,7 @@ export default function CourseCard({ courseId, courseName, imageUrl, completed, 
       </Grid>
     </CardActions>)
   } else if (nftUnclaimed) {
-    courseActions.push(<Divider width="100%" />)
+    courseActions.push(<Divider width="100%" key = {'divider'.concat(courseId)}/>)
     courseActions.push(<CardActions sx={{ padding: 0 }}>
       <Grid container spacing={0}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -66,6 +66,7 @@ export default function CourseCard({ courseId, courseName, imageUrl, completed, 
         backgroundColor: theme.palette.background.paper,
       }}
       variant="outlined"
+      key={courseId}
     >
       <CardActionArea component={RouterLink} to={"/course/".concat(courseId || 1)}>
         <CardMedia

@@ -9,6 +9,7 @@ import { theme } from "../Theme";
 export default function Platform() {
   const [courses, setCourses] = useState(undefined);
   const { enableWeb3, isWeb3Enabled } = useMoralis();
+
   const { data, fetch } = useWeb3ExecuteFunction({
     abi: GurukulABI,
     contractAddress: gurukulContractAddress,
@@ -24,15 +25,18 @@ export default function Platform() {
       setCourses(data);
     };
 
-    init();
-  }, [enableWeb3, isWeb3Enabled, data, fetch]);
+    if (!courses) {
+      init();
+    }
+
+  }, [enableWeb3, isWeb3Enabled, data, fetch, courses]);
 
   let coursesList = []
 
   if (courses) {
     coursesList.push(
       courses.map((course, i) => (
-        <Grid item xs={12} sm={12} md={6} lg={4}>
+        <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
           <CourseCard
             courseId={course.courseId}
             courseName={course.name}

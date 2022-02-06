@@ -55,8 +55,8 @@ export default function Dashboard() {
 
             //Set in progress courses
             if (allCoursesList && allCoursesStudentList && completedCoursesList) {
-                let tempInProgressCourses = []
-                let tempCompletedCourses = []
+                let tempInProgressCourses = new Set();
+                let tempCompletedCourses = new Set();
                 allCoursesList.forEach(course => {
                     allCoursesStudentList.forEach(studentCourseId => {
                         if (course[1].eq(studentCourseId)) {
@@ -67,20 +67,23 @@ export default function Dashboard() {
                                 }
                             });
                             if(isCompleted) {
-                                tempCompletedCourses.push(course);
+                                tempCompletedCourses.add(course);
                             } else {
-                                tempInProgressCourses.push(course);
+                                tempInProgressCourses.add(course);
                             }
                         }
                     });
                 })
-                setCompletedCourses(tempCompletedCourses);
-                setInProgressCourses(tempInProgressCourses);
+                setCompletedCourses(Array.from(tempCompletedCourses));
+                setInProgressCourses(Array.from(tempInProgressCourses));
             }
         };
 
-        init();
-    }, [user, enableWeb3, isWeb3Enabled, completedCoursesList, allCoursesList, allCoursesStudentList, fetchCompletedCourses, fetchAllCourses, fetchAllStudentCourses]);
+        if(!completedCourses || !inProgressCourses) {
+            init();
+        }
+
+    }, [user, enableWeb3, isWeb3Enabled, completedCoursesList, allCoursesList, allCoursesStudentList, fetchCompletedCourses, fetchAllCourses, fetchAllStudentCourses, completedCourses, inProgressCourses]);
 
     let completedCoursesComponents = [];
     let inProgressCoursesComponents = [];
@@ -89,11 +92,10 @@ export default function Dashboard() {
     if (completedCourses) {
         completedCoursesComponents.push(
             completedCourses.map((course, i) => (
-                
                 <Grid item xs={12} sm={12} md={6} lg={4} key={course.courseId}>
                     <CourseCard
                         completed
-                        key={course.courseId}
+                        key={course.courseId.toNumber()}
                         courseId={course.courseId}
                         courseName={course.name}
                         imageUrl="https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg" />
