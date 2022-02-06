@@ -7,17 +7,20 @@ import Platform from "../routes/Platform";
 import MyNFTs from "../routes/MyNFTs";
 import MyTokens from "../routes/MyTokens";
 import CourseDetails from "../routes/CourseDetails";
+import { Box } from "@mui/system";
 
 export default function RouteList() {
 
   return (
-    <Routes>
-      <Route path="/" element={<Platform />}></Route>
-      <Route path="my-created-courses" element={<div><SideNav dashboard/><MyCreatedCourses /></div>} />
-      <Route path="dashboard" element={<div><SideNav dashboard/><Dashboard /></div>} />
-      <Route path="nfts" element={<div><SideNav dashboard/><MyNFTs /></div>} />
-      <Route path="tokens" element={<div><SideNav dashboard/><MyTokens /></div>} />
-      <Route path="/course/:courseId" element={<div><SideNav dashboard/><CourseDetails /></div>} />
-    </Routes>
+    <Box sx={{pt:10}}>
+      <Routes>
+        <Route path="/" element={<Platform />}></Route>
+        <Route path="my-created-courses" element={<div><SideNav dashboard /><MyCreatedCourses /></div>} />
+        <Route path="dashboard" element={<div><SideNav dashboard /><Dashboard /></div>} />
+        <Route path="nfts" element={<div><SideNav dashboard /><MyNFTs /></div>} />
+        <Route path="tokens" element={<div><SideNav dashboard /><MyTokens /></div>} />
+        <Route path="/course/:courseId" element={<div><SideNav dashboard /><CourseDetails /></div>} />
+      </Routes>
+    </Box>
   );
 }

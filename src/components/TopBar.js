@@ -17,7 +17,7 @@ export default function TopBar() {
         zIndex: theme.zIndex.drawer + 1,
       }}
     >
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar sx={{ boxShadow: 3 }}>
           <Typography align="left" variant="h4" component={Link} to={'/'} style={{ color: '#fff', textDecoration: 'none' }}>
             Gurukul
