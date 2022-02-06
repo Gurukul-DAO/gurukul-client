@@ -26,7 +26,7 @@ export default function TopBar() {
           <Box sx={{ flexGrow: 1 }}>
             <WalletButton />
 
-            {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} variant="outlined">
+            {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ float: "right", marginRight: "15px" }} color="secondary" variant="outlined">
               MY DASHBOARD
             </Button>}
           </Box>

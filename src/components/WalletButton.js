@@ -8,7 +8,9 @@ export default function WalletButton() {
 
     if (isAuthenticated) {
         walletButton =
-            <Button color="success" style={{ float: "right" }} variant="outlined"
+            <Button
+                color="secondary"
+                style={{ float: "right" }} variant="outlined"
                 onClick={() => logout()}
             >
                 DISCONNECT
@@ -16,6 +18,7 @@ export default function WalletButton() {
     } else {
         walletButton =
             <Button
+                color="secondary"
                 style={{ float: "right" }}
                 variant="outlined"
                 onClick={() => authenticate({ signingMessage: "GurukulDAO Authentication" })}
