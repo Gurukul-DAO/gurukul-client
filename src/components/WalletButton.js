@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useMoralis } from "react-moralis";
+import { theme } from "../Theme";
 
 export default function WalletButton() {
     const { authenticate, logout, isAuthenticated } = useMoralis();
@@ -9,8 +10,7 @@ export default function WalletButton() {
     if (isAuthenticated) {
         walletButton =
             <Button
-                color="secondary"
-                style={{ float: "right" }} variant="outlined"
+                style={{ float: "right", color: "rgba(0, 0, 0, 0.75)", borderColor: "rgba(0, 0, 0, 0.35)" }} variant="outlined"
                 onClick={() => logout()}
             >
                 DISCONNECT

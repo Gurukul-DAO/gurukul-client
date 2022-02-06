@@ -19,17 +19,17 @@ export default function TopBar() {
     >
       <AppBar position="static">
         <Toolbar sx={{ boxShadow: 3 }}>
-          <Typography align="left" variant="h4" component={Link} to={'/'} style={{ color: theme.palette.text.primary, textDecoration: 'none' }}>
+          <Typography align="left" variant="h4" component={Link} to={'/'} style={{ color: '#fff', textDecoration: 'none' }}>
             Gurukul
           </Typography>
 
           <Box sx={{ flexGrow: 1 }}>
             <WalletButton />
 
-            {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ color: theme.palette.text.primary, float: "right", marginRight: "15px" }} color="secondary" variant="outlined">
+            {isAuthenticated && <Button component={Link} to={'/dashboard'} style={{ color: '#fff', float: "right", marginRight: "15px" }} color="secondary" variant="outlined">
               MY DASHBOARD
             </Button>}
-            {isAuthenticated && <Button component={Link}  to={'/'} style={{ color: theme.palette.text.primary, float: "right", marginRight: "15px" }} variant="text">
+            {isAuthenticated && <Button component={Link}  to={'/'} style={{ color: '#fff', float: "right", marginRight: "15px" }} variant="text">
               EXPLORE
             </Button>}
           </Box>

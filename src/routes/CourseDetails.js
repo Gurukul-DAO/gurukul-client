@@ -129,9 +129,19 @@ export default function CourseDetails() {
 
     }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses, course, isCompleted, isInProgress, isMounted]);
 
+    const renderChips = () => {
+        if (isInProgress && !isCompleted) {
+            return <div>
+                <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br />
+            </div>
+        } else if (isCompleted) {
+            return <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course Completed" variant="outlined" />
+        }
+    }
+
     const renderActions = () => {
         if (isInProgress === false && isCompleted === false) {
-            return <Button variant="outlined" onClick={() => {
+            return <Button variant="contained" size="large" onClick={() => {
                 fetchApproveTokens({ throwOnError: true })
                     .then(async () => {
                         await joinCourse({ throwOnError: true })
@@ -144,8 +154,7 @@ export default function CourseDetails() {
             }}>Buy for $GURU 50 </Button>
         } else if (isInProgress && !isCompleted) {
             return <div>
-                <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course In Progress" variant="outlined" /><br />
-                <Button variant="contained" onClick={() => {
+                <Button variant="contained" size="large" onClick={() => {
                     fetchApproveTokens({ throwOnError: true })
                         .then(async () => {
                             await completeCourse({ throwOnError: true })
@@ -160,8 +169,6 @@ export default function CourseDetails() {
                         );
                 }}>Complete Course</Button>
             </div>
-        } else if (isCompleted) {
-            return <Chip sx={{ fontSize: 15, height: 25 }} color="success" label="Course Completed" variant="outlined" />
         }
     }
 
@@ -171,6 +178,7 @@ export default function CourseDetails() {
         <Video video={{
             name: "Guitar Course",
             youtubeId: "KVopQ0PrERk",
+            isPurchased: isInProgress || isCompleted
         }} key={'KVopQ0PrERk'} />
     </Grid>
 
@@ -178,6 +186,7 @@ export default function CourseDetails() {
         <Video video={{
             name: "Tattoo Course",
             youtubeId: "nOLHPrMHX7w",
+            isPurchased: isInProgress || isCompleted
         }} key={'nOLHPrMHX7w'} />
     </Grid>
 
@@ -185,6 +194,7 @@ export default function CourseDetails() {
         <Video video={{
             name: "Photography Course",
             youtubeId: "bDH4u9e1IfE",
+            isPurchased: isInProgress || isCompleted
         }} key={'bDH4u9e1IfE'} />
     </Grid>
 
@@ -192,6 +202,7 @@ export default function CourseDetails() {
         <Video video={{
             name: "Learn Courses",
             youtubeId: "po_DXGPlRV0",
+            isPurchased: isInProgress || isCompleted
         }} key={'po_DXGPlRV0'} />
     </Grid>
 
@@ -200,7 +211,7 @@ export default function CourseDetails() {
     return (
         <Container sx={{ mt: 2 }}>
             <Typography variant="h4">{course && course[2]}</Typography>
-            {renderActions()}
+            {renderChips()}
 
             <Snackbar open={successSnackState} autoHideDuration={5000} onClose={() => setSuccessSnackState(false)}>
                 <Alert severity="success" sx={{ width: '100%' }}>Successfull transaction!</Alert>
@@ -210,6 +221,8 @@ export default function CourseDetails() {
             </Snackbar>
 
             {renderVideos}
+            
+            {renderActions()}
         </Container>);
 }
 
@@ -235,7 +248,7 @@ function Video(props) {
             </Card>
             <WatchVideoDialog
                 video={props.video}
-                open={videoModalOpen}
+                open={props.video.isPurchased && videoModalOpen}
                 handleClose={() => setVideoModalOpen(false)}
                 handleVideoWatched={() => setVideoWatched(true)}
             />
