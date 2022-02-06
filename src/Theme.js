@@ -7,7 +7,7 @@ export const theme = createTheme({
       main: '#b388ff',
     },
     secondary: {
-      main: '#3c3c3c',
+      main: '#ffffff',
     },
     drawer: {
       width: 240,
