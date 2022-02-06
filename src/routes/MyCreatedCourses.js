@@ -62,7 +62,9 @@ export default function MyCreatedCourses() {
             </Box>
             <TabPanel value={tabState} index={0}>
                 <Grid container spacing={2} sx={{ mt: 1 }}>
-                    {publishedCourses && publishedCourses.map((course) => <Course course={course} key={course.courseId} />)}
+                    {publishedCourses && publishedCourses
+                    .filter(course => course.creator.toUpperCase() === user.attributes.ethAddress.toUpperCase() )
+                    .map((course) => <Course course={course} key={course.courseId} />)}
                 </Grid>
                 <Box sx={{ display: 'flex', float: 'right' }}>
                     <Fab color="primary" aria-label="add" onClick={() => { setNewCourseName(''); setCreateCourseDialogOpen(true) }}>

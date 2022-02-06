@@ -46,11 +46,11 @@ export default function Dashboard() {
             enableWeb3();
         }
         const init = async () => {
-            fetchCompletedCourses();
             fetchAllCourses();
 
             if(user) {
                 fetchAllStudentCourses();
+                fetchCompletedCourses();
             }
 
             //Set in progress courses
