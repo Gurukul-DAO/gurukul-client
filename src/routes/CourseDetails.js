@@ -1,9 +1,11 @@
-import { Alert, Button, Chip, Container, Snackbar, Typography } from "@mui/material";
+import { Check } from "@mui/icons-material";
+import { Alert, Button, Card, CardActionArea, CardContent, CardMedia, Chip, Container, Grid, Snackbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { useParams } from "react-router-dom";
 import GuruABI from "../abis/GuruABI";
 import GurukulABI from "../abis/GurukulABI";
+import { WatchVideoDialog } from "../components/WatchVideoDialog";
 import { creatorStake } from "../constants";
 import { guruContractAddress, gurukulContractAddress } from "../credentials";
 
@@ -128,7 +130,7 @@ export default function CourseDetails() {
     }, [enableWeb3, isWeb3Enabled, allCourses, fetchAllCourses, courseId, allCoursesStudentList, completedCoursesList, user, fetchAllStudentCourses, fetchCompletedCourses, course, isCompleted, isInProgress, isMounted]);
 
     const renderActions = () => {
-        if (isInProgress=== false && isCompleted === false) {
+        if (isInProgress === false && isCompleted === false) {
             return <Button variant="outlined" onClick={() => {
                 fetchApproveTokens({ throwOnError: true })
                     .then(async () => {
@@ -163,6 +165,38 @@ export default function CourseDetails() {
         }
     }
 
+    const renderVideos = <Grid container spacing={0}>
+
+    <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
+        <Video video={{
+            name: "Guitar Course",
+            youtubeId: "KVopQ0PrERk",
+        }} key={'KVopQ0PrERk'} />
+    </Grid>
+
+    <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
+        <Video video={{
+            name: "Tattoo Course",
+            youtubeId: "nOLHPrMHX7w",
+        }} key={'nOLHPrMHX7w'} />
+    </Grid>
+
+    <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
+        <Video video={{
+            name: "Photography Course",
+            youtubeId: "bDH4u9e1IfE",
+        }} key={'bDH4u9e1IfE'} />
+    </Grid>
+
+    <Grid item xs={12} sm={6} md={6} lg={4} sx={{ margin: 0 }}>
+        <Video video={{
+            name: "Learn Courses",
+            youtubeId: "po_DXGPlRV0",
+        }} key={'po_DXGPlRV0'} />
+    </Grid>
+
+</Grid>
+
     return (
         <Container sx={{ mt: 2 }}>
             <Typography variant="h4">{course && course[2]}</Typography>
@@ -174,5 +208,37 @@ export default function CourseDetails() {
             <Snackbar open={errorSnackState} autoHideDuration={5000} onClose={() => setErrorSnackState(false)}>
                 <Alert severity="error" sx={{ width: '100%' }}>Transaction failed!</Alert>
             </Snackbar>
+
+            {renderVideos}
         </Container>);
+}
+
+function Video(props) {
+    const [videoModalOpen, setVideoModalOpen] = useState(false);
+    const [videoWatched, setVideoWatched] = useState(false);
+
+    return (
+        <>
+            <Card sx={{ width: 340, height: 250, float: 'left', margin: 1 }}>
+                <CardActionArea>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={"https://img.youtube.com/vi/" + props.video.youtubeId + "/0.jpg"}
+                        alt="Preview image"
+                        onClick={() => setVideoModalOpen(true)}
+                    />
+                </CardActionArea>
+                <CardContent>
+                    <Typography variant="h5">{props.video.name} {videoWatched && <Check/>}</Typography>
+                </CardContent>
+            </Card>
+            <WatchVideoDialog
+                video={props.video}
+                open={videoModalOpen}
+                handleClose={() => setVideoModalOpen(false)}
+                handleVideoWatched={() => setVideoWatched(true)}
+            />
+        </>
+    )
 }

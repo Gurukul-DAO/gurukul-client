@@ -18,7 +18,7 @@ export function WatchVideoDialog(props) {
                 <YouTube
                     videoId={props.video.youtubeId}
                     onEnd={() => setVideoEnded(true)}
-                    opts={{ playerVars: { autoplay: 1, modestbranding: 1 } }} />
+                    opts={{ playerVars: { autoplay: 0, modestbranding: 1 } }} />
             </DialogContent>
             <DialogActions>
                 <Button disabled={!videoEnded} onClick={() => { props.handleVideoWatched(); props.handleClose() }}><Check />Mark watched</Button>
